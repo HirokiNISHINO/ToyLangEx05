@@ -86,7 +86,7 @@ public class Parser
 	 */
 	public AstNode exprStmt() throws IOException, CompileErrorException
 	{
-		AstNode e = this.expr();
+		AstNode e = this.additiveExpr();
 		
 		Token t = this.getCurrentToken();
 		if (t.getC() != ';') {
@@ -101,9 +101,9 @@ public class Parser
 	 * @throws IOException
 	 * @throws CompileErrorException
 	 */
-	public AstNode expr() throws IOException, CompileErrorException
+	public AstNode additiveExpr() throws IOException, CompileErrorException
 	{
-		AstNode lhs = term();
+		AstNode lhs = multiplicativeExpr();
 		while(true) {
 			Token t = this.getCurrentToken();
 			
@@ -116,7 +116,7 @@ public class Parser
 			}
 			this.consumeCurrentToken();
 			
-			AstNode rhs = term();
+			AstNode rhs = multiplicativeExpr();
 			AstNode binop = new AstBinOp(lhs, rhs, t);
 			lhs = binop;
 		}
@@ -129,7 +129,7 @@ public class Parser
 	 * @throws IOException
 	 * @throws CompileErrorException
 	 */
-	public AstNode term() throws IOException, CompileErrorException
+	public AstNode multiplicativeExpr() throws IOException, CompileErrorException
 	{
 		// primary | primary (*|/) primary
 		AstNode lhs = primary();
@@ -167,7 +167,7 @@ public class Parser
 		if (t.getC() == '(') {
 			this.consumeCurrentToken();
 			
-			AstNode e = expr();
+			AstNode e = additiveExpr();
 			
 			t = this.getCurrentToken();
 			if (t.getC() != ')') {
