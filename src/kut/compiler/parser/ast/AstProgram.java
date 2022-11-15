@@ -63,12 +63,15 @@ public class AstProgram extends AstNode
 		
 		gen.printCode(	"and rsp, 0xFFFFFFFFFFFFFFF0 ; stack must be 16 bytes aligned to call a C function.");
 		gen.printCode(	"push rax ; we need to preserve rax here.");
+		gen.printCode(  "push rax ; pushing twice for 16 byte alignment. We'll discard this later. ");
 		gen.printCode();
 		gen.printCode(	"; call printf to print out the exti code.");
 		gen.printCode(	"lea rdi, [rel fmt] ; the format string");
 		gen.printCode(	"mov rsi, rax		; the exit code ");
 		gen.printCode(  "mov rax, 0			; no xmm register is used.");
 		gen.printCode(	"call " + gen.getExternalFunctionName("printf"));
+		gen.printCode();
+		gen.printCode(	"pop rax ; this value will be discared (as we did 'push rax' twice for 16 bytes alignment.");
 		gen.printCode();
 		gen.printCode(	"mov rax, "+ gen.getExitSysCallNum() + "; specify the exit sys call.");
 		gen.printCode(	"pop rdi ; this is the rax value we pushed at the entry of this sub routine");
