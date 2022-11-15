@@ -18,7 +18,7 @@ public class CodeGenerator
 {
 	protected Platform		platform;
 	protected String 		filename;
-	protected AstNode			program	;
+	protected AstNode		program	;
 	protected PrintWriter 	writer	;
 	
 	/**
